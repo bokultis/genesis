@@ -1,0 +1,12 @@
+{
+    "name": "horisen/cms-admin-mod",
+    "description": "Horisen CMS admin module",
+    "type": "horisen-cms_mod",
+    "require": {
+        "horisen/cms-core-lib": "*",
+        "horisen/cms-admin-pub-mod": "*"
+    },
+    "extra": {
+        "installer-name": "admin"
+    }
+}

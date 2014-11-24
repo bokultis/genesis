@@ -1,0 +1,12 @@
+{
+    "name": "horisen/cms-contact-mod",
+    "description": "Horisen CMS contact module",
+    "type": "horisen-cms_mod",
+    "require": {
+        "horisen/cms-core-lib": "*",
+        "horisen/cms-admin-pub-mod": "*"
+    },
+    "extra": {
+        "installer-name": "contact"
+    }
+}

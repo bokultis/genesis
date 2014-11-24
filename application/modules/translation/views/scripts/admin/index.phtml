@@ -1,0 +1,96 @@
+<script type="text/javascript" src="/plugins/jqgrid/js/i18n/grid.locale-en.js"></script>
+<link href="/modules/translation/css/ui.multiselect.css" media="screen" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/modules/translation/js/ui.multiselect.js"></script>
+<script type="text/javascript" src="/plugins/jqgrid/js/jquery.jqGrid.min.js"></script>
+<script type="text/javascript" src="/plugins/jqgrid/js/afterSubmit.js"></script>
+<script type="text/javascript" src="/modules/translation/js/translation.js"></script>
+
+<script type="text/javascript" src="/modules/translation/js/jquery.layout.js"></script>
+<script type="text/javascript" src="/modules/translation/js/jquery.json-2.2.min.js"></script>
+<script type="text/javascript" src="/modules/translation/js/aim.js"></script>
+<link href="/plugins/jqgrid/css/ui.jqgrid.css" media="screen" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        /* GRID OPTIONS */
+        var options =<?php echo $this->option; ?>;
+
+        /* GRID PRE JS */
+        var selICol; //iCol of selected cell
+        var selIRow; //iRow of selected cell
+        options.colModel[0].editoptions = {editable: true };
+
+        options.colModel[2].searchoptions = {value: '<?php echo $this->section; ?>', sopt:['eq','ne']};
+
+        options.colModel[3].searchoptions = {value: '<?php echo $this->menu; ?>', sopt:['eq','ne']};  
+        options.colModel[4].searchoptions = {value: '<?php echo $this->type; ?>', sopt:['eq','ne']};  
+
+        options.beforeEditCell = function(rowid, cellname, value, iRow, iCol){
+            selICol = iCol;
+            selIRow = iRow;
+        },
+
+        options.beforeSubmitCell = function(rowid,celname,value,iRow,iCol) {
+            var key = jQuery('#jqGridTabletranslation').jqGrid('getCell',rowid,1);
+            var sectionVal = jQuery('#jqGridTabletranslation').getCell(rowid, 3);
+            return {key: key, lang_id: celname, val: value, section: sectionVal}
+        }
+
+        options.errorCell = function (serverresponse, status){
+
+        }
+        options.afterSubmitCell = function (serverresponse, rowid, cellname, value, iRow, iCol){
+          eval('var error = ' + serverresponse.responseText);
+          if (error["success"]) {
+                $.flashMessenger(error['message'],{clsName:"ok"});
+                jQuery('#jqGridTabletranslation').trigger("reloadGrid");
+            }else{
+                $.flashMessenger(error['message'],{clsName:"err"});
+            }
+            return [error["success"],error["message"],""];
+        }
+
+        /* GRID INIT */
+        jQuery('#jqGridTabletranslation').jqGrid(options);
+
+        /* GRID POST JS*/
+        translationCustomGrid('#jqGridTabletranslation', '#jqGridTablePagertranslation'); 
+})
+</script>
+
+<div id="dialog_import_xls" class="clearfix" title="<?php echo $this->translate('Import from excel'); ?>"  style="padding:5px; display:none;">
+    <form method="post"  class="FormGrid" id="uploadXlsForm"
+    action="<?php echo $this->url(array('controller' => 'admin', 'action' => 'import-from-excel')) ?>"
+    enctype="multipart/form-data">
+        <div style="padding: 5px;"><a href="modules/translation/template/template.xls" ><?php echo $this->translate('XLS file template'); ?></a></div>
+        <div style="padding: 5px;"><input type="file" name="xls" id="xls" /></div>
+        <div class="ui-dialog-buttonset" style="padding: 5px;">
+            <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" onclick="$('#uploadXlsForm').submit();"><span class="ui-button-text"><?php echo $this->translate('Import'); ?></span></button>
+        </div>
+    </form>
+</div>
+<div class="hcms_content_top">
+    <h1><?php echo $this->translate('Translation'); ?></h1>
+    <span class="hcms_search">
+        <!--
+        <input name="searchFilter" id="searchFilter" type="text" value="" />
+        <span class="hcms_button"><a href="#" id="searchExecute"><?php echo $this->translate("Search"); ?></a></span>
+        -->
+    </span>
+</div>
+<div class="hcms_content">
+    <div class="language">
+        <!--<span class="hcms_button"><a href="#">Filter</a></span>-->
+    </div>
+    
+</div>
+<!--
+{if $error != ""}
+<div class="ui-state-error" style="width: 250px;">
+    {$error}
+</div>
+{/if}
+-->
+<table id="jqGridTabletranslation" summary="grid_jqGridTabletranslation"><tr><td>&nbsp;</td></tr></table>
+<div id="jqGridTablePagertranslation"></div>
+

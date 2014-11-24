@@ -1,0 +1,27 @@
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#username").focus();
+    });
+</script>
+
+
+<h1 id="logo"><?php echo $this->application->get_name();?></h1>
+<div class="login_box">
+    <form id="login" name="login" method="post" action="">
+        <div class="user_input">
+            <p><label><?php echo $this->translate("Username") . ": "; ?></label>
+            <input class="_input" type="text" id="username" name="username" value="<?php if(isset($this->username)){echo $this->escape($this->username);}?>" /></p>
+
+            <p><label><?php echo $this->translate("Password"). ": "; ?></label>
+            <input class="_input" type="password" id="passowrd" name="password" value="<?php if(isset($this->password)){echo $this->escape($this->password);}?>" /></p>
+            
+            <span><?php echo $this->messages; ?></span>
+        </div>
+        <div class="user_submit">
+            <span class="logged left"></span>
+            <span class="right"><input class="hcms_button" type="submit" name="submit" value="<?php echo $this->translate("Login"); ?>" /></span>
+        </div>
+
+    </form>
+</div>

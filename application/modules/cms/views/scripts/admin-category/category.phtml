@@ -1,0 +1,88 @@
+<?php
+    $this->headScript()->appendFile('/plugins/hfb/js/jquery.hfbSelect.js');
+    $this->headScript()->appendFile('/plugins/hfb/js/jquery.hfbSearch.js');
+    $this->headScript()->appendFile('/plugins/hfb/js/jquery.hfbList.js');
+    $this->headScript()->appendFile('/modules/admin/js/list.js');
+    $this->headScript()->appendFile('/modules/cms/js/categoryList.js');
+    $this->headScript()->appendFile('/plugins/serverbrowser/jquery.filebrowserdialog.js');
+?>
+<script type="text/javascript">
+    var categoryItemData = null;
+</script>
+<div class="hcms_content_top">
+    <h1><?php echo $this->translate('Category'); ?> <span class="hcms_button"><a href="#" style="margin:6px 0 0 0;" class="add button"><?php echo $this->translate('Add new'); ?></a></span> <span class="hcms_button"><a href="#" id="newCategory" class="button" style="margin: 6px 0pt 0pt;"><?php echo $this->translate('Add New Set');?></a></span> </h1>
+</div>
+<div class="hcms_content">
+    <div class="language">
+        <fieldset style="display: none" id="inputNewCategory">
+            <legend><?php echo $this->translate('New Category Set');?></legend>
+            <form method="post"  id="categoryForm" action="<?php echo $this->url(array('controller' => 'admin-category', 'action' => 'edit-main-category')) ?>" enctype="application/x-www-form-urlencoded">
+             <?php echo $this->translate('Name');?>:<input name="data[name]" id="data[name]" type="text" value="" />
+             <?php echo $this->translate('Description');?>:<input name="data[description]" id="data[description]" type="text" value="" />
+             <?php echo $this->translate('Module');?>:
+             <select id="data[module]" name="data[module]">
+                <option value="">select</option>
+                <?php foreach ($this->modules as $module) {?>
+                <option value="<?php echo $module->get_code();?>" ><?php echo $this->escape($module->get_name());?></option>
+                <?php }?>
+             </select>
+             <?php echo $this->translate('Page type');?>:
+             <select id="data[page_type_id]" name="data[page_type_id]">
+                <option value="">select</option>
+                <?php foreach ($this->pageTypes as $pageTypes) {?>
+                <option value="<?php echo $pageTypes->get_id();?>" ><?php echo $this->escape($pageTypes->get_name());?></option>
+                <?php }?>
+             </select>
+             <span class="hcms_button"><a href="#" id="saveCategory"><?php echo $this->translate('Save');?></a></span>
+             <span class="hcms_button"><a href="#" id="cancelCategory"><?php echo $this->translate('Cancel');?></a></span>
+            </form>
+        </fieldset>
+    </div>
+    <div class="language">
+        <label><?php echo $this->translate('Category Set');?></label>
+        <select id="categorySetFilter" name="categorySetFilter">
+<!--            <option value="">select</option>-->
+            <?php foreach ($this->categorySets as $set) {?>
+            <option value="<?php echo $set['id'];?>" ><?php echo $this->escape($set['name']);?></option>
+            <?php }?>
+        </select>
+        <?php if($this->singleLang === false){?>
+        <label><?php echo $this->translate('Language');?></label>
+        <select id="langFilter" name="langFilter">
+            <?php foreach ($this->languages as $langCode => $lang) { ?>
+                <option value="<?php echo $langCode;?>" <?php if($langCode == 'en') {?>selected="selected" <?php } ?>><?php echo $this->escape($lang['name']);?></option>
+            <?php }?>
+        </select>
+        <?php }?>
+<!--        <span class="hcms_button"><a href="#">Filter</a></span>-->
+    </div>
+    <table class="hcms_table adminList" width="100%">
+        <thead>
+            <tr>
+                <th><a href="#" class="sort" data-column="name"><?php echo $this->translate('Name');?><b></b></a></th>
+            </tr>
+        </thead>
+        <tbody id="listContainer">
+        </tbody>
+    </table>
+    <div id="pager"></div>
+</div>
+<script type="text/html" id="records_tpl">
+<% categoryItemData = rows;
+    if (rows.length > 0){
+    var rowClass = 'odd';
+    %>
+    <% for ( var i = 0; i < rows.length; i++ ){
+        rowClass = (i % 2 == 0)? 'even':'odd';
+    %>
+        <tr class="<%=rowClass%>" >
+            <td  style="padding-left:<%=rows[i].level * 50 + 10%>px" >
+                <%=rows[i].name%>
+                <ul class="hcms_menu_actions">
+                    <li><a href="#" class="edit" data-id="<%=rows[i].id%>"><?php echo $this->translate('Edit');?></a></li>
+                </ul>
+            </td>
+        </tr>
+    <% } %>
+<% } %>
+</script>

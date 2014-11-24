@@ -1,0 +1,151 @@
+<?php
+    $this->headScript()->appendFile('/plugins/hfb/js/jquery.hfbSelect.js');
+    $this->headScript()->appendFile('/plugins/hfb/js/jquery.hfbSearch.js');
+    $this->headScript()->appendFile('/plugins/hfb/js/jquery.hfbList.js');
+    $this->headScript()->appendFile('/modules/teaser/js/teaser_list.js');
+    $this->headScript()->appendFile('/plugins/serverbrowser/jquery.filebrowserdialog.js');
+    $this->headScript()->appendFile('/plugins/imagebrowser/jquery.imagebrowserdialog.js');
+    $this->headScript()->appendFile('/plugins/jquery-ui-timepicker-addon/jquery-ui-timepicker-addon.js');    
+    
+    //chosen
+    $this->headScript()->appendFile('/plugins/chosen/chosen.jquery.min.js');
+    $this->headLink()->appendStylesheet( '/plugins/chosen/chosen.css');
+    //dd slick
+    $this->headScript()->appendFile('/plugins/ddslick/jquery.ddslick.min.js');
+    
+    $this->headLink()->appendStylesheet( '/modules/teaser/css/admin.css');    
+    $boxes = Teaser_Model_TeaserMapper::getInstance()->getBox();
+?>
+<script type="text/javascript">    
+    var picker = "<?php echo $this->picker; ?>",
+        boxes = <?php echo json_encode($boxes); ?>,
+        listUrl = '/' + CURR_LANG + '/teaser/admin-teaser/list/?langFilter=<?php echo $this->defaultLang;?>',
+        deleteConfirmation = '<?php echo $this->translate('Are you sure you want to delete this record?');?>'; 
+</script>
+
+<div class="hcms_content_top">
+    <h1><?php echo $this->translate('Sliders'); ?></h1>
+    <span class="hcms_button"><a href="#" class="add button"><?php echo $this->translate('Add new'); ?></a></span>
+</div>
+
+<div class="hcms_content">
+    <div class="language">
+        <?php if($this->singleLang === false) {?>
+        <select id="langFilter" name="langFilter">
+           <?php echo $this->langOptions($this->languages,$this->defaultLang,true);?>
+        </select>
+        <?php }?>
+        
+        <label><?php echo $this->translate('Template');?>:</label>
+        <select id="box_code" name="box_code">
+            <option value="" selected="selected"><?php echo $this->translate('Choose Template');?></option>
+             <?php  foreach ($boxes as $boxCode => $box ) {?>
+                <option value="<?php echo $boxCode ;?>" <?php if(isset($box['icon'])){ echo 'data-imagesrc="' . $box['icon'] . '"';};?> > <?php echo $box['name']; ?> </option> 
+            <?php }?>
+        </select>        
+        
+        <label><?php echo $this->translate('Name');?>:</label>
+        <input type="text" class="_input" name="name" id="name" value="" maxlength="100" />
+        
+        <label><?php echo $this->translate('Start Date');?>:</label>
+        <input type="text" class="_input" name="start_dt" id="start_dt" value="" maxlength="100" />
+        
+        <label><?php echo $this->translate('End Date');?>:</label>
+        <input type="text" class="_input" name="end_dt" id="end_dt" value="" maxlength="100" />
+        
+        <label><?php echo $this->translate('Menu');?>:</label>
+        <?php echo $this->cmsMenuSelect(array(
+            'id'    => 'menu_item_id',
+            'name'  => 'menu_item_id',
+            'default_text'  => 'Choose menu item'
+        ));?>       
+        
+        <span class="hcms_button"><a href="#" id="filter"><?php echo $this->translate('Filter');?></a></span>
+    </div>
+    
+    <ul class="teaserList" id="listContainer">
+        
+    </ul>
+    <div id="pager"></div>
+</div>
+<script type="text/html" id="records_tpl">
+<%  if (rows.length > 0){
+        for ( var j = 0; j < rows.length; j++ ){ %>
+        <li class="sliderCollapser show">
+            <div class="sliderTitle">
+                <img src="/../modules/admin/images/icons/arrow.png" />
+                <h2><%=rows[j].name %></h2>
+                <h3>(<%=rows[j].box_name %>)</h3>
+                <ul>
+                    <li><a href="#" class="itemAdd" data-box_code="<%=rows[j].box_code%>" data-id="<%=rows[j].id%>"><?php echo $this->translate('Add Item');?></a></li>
+                    <li><a href="#" class="edit" data-id="<%=rows[j].id%>"><?php echo $this->translate('Edit');?></a></li>
+                    <li><a href="#" class="delete" data-id="<%=rows[j].id%>"><?php echo $this->translate('Delete');?></a></li>
+                    <li><a href="#" class="clone" data-id="<%=rows[j].id%>"><?php echo $this->translate('Clone');?></a></li>
+                    <li><a href="#" class="preview" data-id="<%=rows[j].id%>"><?php echo $this->translate('Preview');?></a></li>
+                </ul>
+            </div>
+            <%  if(rows[j]['items'].length > 0) { %>
+            <table class="hcms_table itemList" width="100%" data-id="<%=rows[j].id%>">
+                <tbody data-id="<%=rows[j].id%>">
+                    <%
+                    var items = rows[j]['items'];
+                    for ( var k = 0; k < items.length; k++ ){ %>
+                    <tr data-id="<%=items[k].id%>" data-teaser_id="<%=rows[j].id%>" data-status="<%=items[k].status%>">
+                        <td>
+                            <%
+                            var itemImage = getItemImage(items[k]);
+                            if(itemImage){%>
+                            <img src="<%=itemImage%>" alt="" style="width: 100px">
+                            <%}%>
+                        </td>            
+                        <td>
+                            <%=items[k].title%><br>
+                            <ul class="hcms_menu_actions">                                
+                                <li><a href="#" class="itemEdit" data-id="<%=items[k].id%>"><?php echo $this->translate('Edit');?></a></li>
+                                <li><a href="#" class="itemDelete" data-id="<%=items[k].id%>"><?php echo $this->translate('Delete');?></a></li>
+                                <li><a href="#" class="itemClone" data-id="<%=items[k].id%>"><?php echo $this->translate('Clone');?></a></li>
+                            </ul>
+                        </td>
+                        <td><%=items[k].start_dt%></td>
+                        <td><%=items[k].end_dt%></td>
+                        <td class="status_<%=items[k].status%>"><%=items[k].status_name%></td>
+                    </tr>
+                <%  } %>                         
+                </tbody>
+            </table>
+            <%  } %>
+        </li>
+    <%  }
+    } %>
+</script>
+
+<script type="text/html" id="images_tpl">
+<%  if (images){
+        for ( var imageId in images){
+            var image = images[imageId];
+            var imageValue = (data && data['content'] && data['content'][imageId])? data['content'][imageId]: '';%>    
+    <label class="customImage"><%=image.name %>
+        <div class="customImage">
+            <input type="text" class="_input customTeaserImage" data-id="<%=imageId %>" name="data[content][<%=imageId %>]"  id="data[content][<%=imageId %>]" value="<%=imageValue%>" maxlength="255" />
+        </div>        
+    </label>
+<%      }
+    } %>    
+</script>
+
+<div id="boxDialog" title="<?php echo $this->translate('Template');?>" style="display: none;">
+    <div style="height: 400px">
+        <select id="dialogBoxCode" name="dialogBoxCode">
+            <option value="" selected="selected"><?php echo $this->translate('Choose Template');?></option>
+                <?php  foreach ($boxes as $boxCode => $box ) {?>
+                    <option value="<?php echo $boxCode ;?>" <?php if(isset($box['icon'])){ echo 'data-imagesrc="' . $box['icon'] . '"';};?> > <?php echo $box['name']; ?> </option> 
+                <?php }?>
+        </select>
+    </div>
+</div>
+
+<div id="previewDialog" title="<?php echo $this->translate('Preview settings');?>" style="display: none">
+    <label><?php echo $this->translate('Preview Date/Time');?>
+        <input type="text" class="_input" name="preview_dt" id="preview_dt" value="" maxlength="100" />
+    </label>    
+</div>

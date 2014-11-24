@@ -1,0 +1,10 @@
+<?php
+$this->headScript()->appendFile('/plugins/bootstrap/js/bootstrap.min.js');
+$this->headScript()->appendFile($this->themePath('js/api.js?v=2014-11-18'));
+$this->headLink()->appendStylesheet($this->themePath('css/api.css?v=2014-11-18'));
+?>
+<div id="apiMenu"></div>
+<div id="apiToc"></div>
+<div id="apiContent">
+    <?php echo $this->renderPage($this->page); ?>    
+</div>

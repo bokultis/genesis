@@ -1,0 +1,35 @@
+<?php
+    $this->doctype('XHTML1_TRANSITIONAL');
+    echo $this->doctype();
+?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><?php echo $this->translate("Administration");?></title>
+    <base href="<?php echo $this->serverUrl() . $this->fileWebRoot; ?>" />
+    <?php
+        $favicon =  '/modules/admin/images/favicon.ico';
+        $this   ->headLink(array('rel' => 'icon', 'href' => $favicon, 'type' => 'image/x-icon'),'PREPEND')
+                ->headLink(array('rel' => 'shortcut icon', 'href' => $favicon, 'type' => 'image/x-icon'),'PREPEND'); //fb ico
+        $this->headLink()->prependStylesheet( '/modules/admin/css/login.css');
+        $this->headScript()->prependFile('/plugins/jqueryui/jquery-ui-1.8.11.custom.min.js');
+        $this->headScript()->prependFile('/js/jquery-1.5.1.min.js');
+        
+        echo $this->headScript();
+        echo $this->headLink();        
+        echo $this->headStyle();
+    ?>
+</head>
+<body>
+
+<div class="wraper clearfix">
+    <div class="header">
+    </div>
+    <div class="content">
+        <div class="section_full">
+            <?php echo $this->layout()->content ?>
+        </div>
+    </div>
+</div>
+</body>
+</html>

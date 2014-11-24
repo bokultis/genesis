@@ -1,0 +1,87 @@
+<?php
+    $this->doctype('XHTML1_TRANSITIONAL');
+    echo $this->doctype();
+?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title><?php echo $this->translate("Administration");?></title>
+    <base href="<?php echo $this->serverUrl() . $this->fileWebRoot; ?>" />
+    <?php
+        $favicon =  '/modules/admin/images/favicon.ico';
+        $this   ->headLink(array('rel' => 'icon', 'href' => $favicon, 'type' => 'image/x-icon'),'PREPEND')
+                ->headLink(array('rel' => 'shortcut icon', 'href' => $favicon, 'type' => 'image/x-icon'),'PREPEND'); //fb ico
+        $this->headLink()->prependStylesheet( '/modules/admin/css/admin.css');
+        $this->headLink()->prependStylesheet( '/modules/admin/css/icons.css');
+        $this->headLink()->prependStylesheet( '/modules/admin/css/dashicons.css');
+        $this->headLink()->prependStylesheet( '/plugins/jquery-confirm/jquery.confirm.css');              
+        $this->headLink()->prependStylesheet( '/plugins/flashmessenger/flashmessenger.css');        
+        $this->headLink()->prependStylesheet( '/plugins/jqueryui/jquery-ui-1.8.11.custom.css');        
+        echo $this->headLink();
+        $this->headScript()->prependFile('/js/jquery.prompt.js');
+        $this->headScript()->prependFile('/js/ajaxLoader.js');
+        $this->headScript()->prependFile('/js/php.js');
+        $this->headScript()->prependFile('/js/init.js');
+        $this->headScript()->prependFile('/js/json2.js');
+        $this->headScript()->prependFile('/plugins/jqueryui/jquery-ui-1.8.11.custom.min.js');
+        $this->headScript()->prependFile('/plugins/flashmessenger/jquery.flashmessenger.js');
+        $this->headScript()->prependFile('/plugins/jquery-confirm/jquery.confirm.js');
+        //$this->headScript()->prependFile('/js/jquery-1.5.1.min.js');
+        //$this->headScript()->prependFile('/modules/admin/js/menu.js');
+        $this->headScript()->prependFile('/modules/admin/js/jquery-1.7.1.min.js');
+        echo $this->headScript();
+        echo $this->headStyle();
+    ?>
+    <script type="text/javascript">
+        var fileWebRoot = '<?php echo $this->fileWebRoot;?>';
+    </script>
+</head>
+<body>
+<div id="flashMessenger" style="display: none"><?php echo $this->flashMessenger(); ?></div>
+<div class="hcms_wraper">
+    <div class="hcms_header">
+        <div class="headline">Admin Panel - HORISEN CMS</div>
+        <div class="headline"><?php
+            if(isset ($this->versionInfo['version'])){
+                echo 'Version ' . $this->versionInfo['version'];
+            }
+            if(isset ($this->versionInfo['built_number'])){
+                if ( preg_match('/\d+/', $this->versionInfo['built_number'], $match) ) {
+                    echo ' (built ' . $match[0] . ')';
+                }
+            }
+        ?></div>
+        <div class="front_link"><a href="/" target="_blank"><?php if(isset ($this->application)){echo $this->application->get_name();}?></a></div>
+        <div class="logout">
+            <a href="<?php echo $this->url(array('module' => 'admin','controller' => 'index', 'action' => 'logout')); ?>"><span class="dash -logout">&nbsp;</span><?php echo $this->translate("Logout"); ?></a>
+        </div>
+        <div class="user">
+            
+            <?php if(is_object($this->admin)){?><a href="<?php echo $this->url(array('module' => 'auth','controller' => 'admin-user', 'action' => 'user-edit', 'id'=>$this->admin->get_id()));?>">
+                <span class="dash -user">&nbsp;</span><?php echo $this->escape($this->admin->get_username());?>
+            </a><?php } ?>
+            
+        </div>
+    </div>
+    
+    <table class="hcms_main" border="0" cellspacing="0" cellpadding="0">
+		<tr>
+			<td class="hcms_left">
+                <div class="hcms_left">
+                    <div class="hcms_logo">&nbsp;</div>
+                    <?php echo $this->navigation()->fbmenu()->renderMenu(null,array('ulClass' => 'menu', 'indent' => 10)); ?>
+                </div>
+            </td>
+    		<td class="hcms_right">
+        		<?php echo $this->layout()->content ?>  
+            </td>
+        </tr>
+    </table>      
+
+    <div class="hcms_footer">
+        <?php echo $this->translate("Copyright");?> &copy; <?php echo date("Y");?> <a target="_blank" href="http://www.horisen.ch">HORISEN</a><?php echo " | " . $this->translate("All rights reserved.");?>
+    </div>        
+ 
+</div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<?php
+    $this->headScript()->appendFile('/plugins/hfb/js/jquery.hfbSelect.js');
+    $this->headScript()->appendFile('/plugins/hfb/js/jquery.hfbSearch.js');
+    $this->headScript()->appendFile('/plugins/hfb/js/jquery.hfbList.js');
+    $this->headScript()->appendFile('/plugins/tableDnD/jquery.tablednd.js');
+    $this->headScript()->appendFile('/modules/admin/js/list.js');
+    $this->headScript()->appendFile('/modules/cms/js/list.js');
+    $this->headStyle()->appendStyle('table.hcms_table td {height: 30px}');
+?>
+<script type="text/javascript">
+    var menuItemData = null;
+    var listUrl = '/' + CURR_LANG + '/cms/admin-menu/menu-list/?langFilter=<?php echo $this->defaultLang;?>';
+</script>
+<div class="hcms_content_top">
+    <h1><?php echo $this->translate('Menus Items'); ?> <span class="hcms_button"><a href="#" style="margin:6px 0 0 0;" class="add button"><?php echo $this->translate('Add new Item'); ?></a></span> <span class="hcms_button"><a href="#" id="newMenu" class="button" style="margin: 6px 0pt 0pt;"><?php echo $this->translate('Add new Menu');?></a></span> </h1>
+    <span class="hcms_search">
+    </span>
+</div>
+<div class="hcms_content">
+    <div class="language">
+        <fieldset style="display: none" id="inputNewMenu">
+            <legend><?php echo $this->translate('New Menu');?></legend>
+            <form method="post"  id="menuForm" action="<?php echo $this->url(array('controller' => 'admin-menu', 'action' => 'edit-main-menu')) ?>" enctype="application/x-www-form-urlencoded">
+            <?php echo $this->translate('Code');?>:<input name="data[code]" id="data[code]" type="text" value="" />
+            <?php echo $this->translate('Name');?>:<input name="data[name]" id="data[name]" type="text" value="" />
+             <span class="hcms_button"><a href="#" id="saveMenu"><?php echo $this->translate('Save');?></a></span>
+             <span class="hcms_button"><a href="#" id="cancelMenu"><?php echo $this->translate('Cancel');?></a></span>
+            </form>
+        </fieldset>
+    </div>
+    <div class="language">
+        <label><?php echo $this->translate('Menu');?></label>
+        <select id="menuFilter" name="menuFilter">
+            <?php foreach ($this->menus as $menu) {?>
+            <option value="<?php echo $menu['code'];?>" <?php if($menu['code'] == 'main') {?>selected="selected" <?php } ?>><?php echo $this->escape($menu['name']);?></option>
+            <?php }?>
+        </select>
+        <?php if($this->singleLang === false){?>
+        <label><?php echo $this->translate('Language');?></label>
+        <select id="langFilter" name="langFilter">
+            <?php echo $this->langOptions($this->languages,$this->defaultLang,true);?>
+        </select>
+        <?php }?>
+       <!-- <span class="hcms_button"><a href="#">Filter</a></span> -->
+    </div>
+    <table class="hcms_table adminList" width="100%">
+        <thead>
+            <tr>
+                <th><a href="#" class="sort" data-column="name"><?php echo $this->translate('Name');?><b></b></a></th>
+                <th width="20%"><a href="#" class="sort" data-column="hidden"><?php echo $this->translate('Hidden');?><b></b></a></th>
+            </tr>
+        </thead>
+    </table>
+    <table class="hcms_table adminList" width="100%" id="listContainer">
+        <tbody>
+        </tbody>
+    </table>
+    <div id="pager"></div>
+</div>
+<script type="text/html" id="records_tpl">
+<% menuItemData = rows;
+    if (rows.length > 0){
+    var rowClass = 'odd';
+    %>
+    <% for ( var i = 0; i < rows.length; i++ ){
+        rowClass = (i % 2 == 0)? 'even':'odd';
+    %>
+    <tr class="<%=rowClass%>" id="listContainer-row-<%=rows[i].id%>">
+            <td  style="padding-left:<%=rows[i].level * 50 + 10%>px;<% if(rows[i].hidden == 'yes'){ %> opacity: 0.4; <% } %>"   >
+                <%=rows[i].name%>
+                <ul  class="hcms_menu_actions">
+                    <li><a href="#" class="edit" data-id="<%=rows[i].id%>"><?php echo $this->translate('Edit');?></a></li>
+                    <li><a href="#" class="add" data-id="<%=rows[i].id%>" data-><?php echo $this->translate('Add SubMenu Item');?></a></li>
+                    <li><a href="<%=rows[i].url%>" target="_blank" class="view" data-id="<%=rows[i].id%>"><?php echo $this->translate('View');?></a></li>
+                    <li><a href="<%=rows[i].url%>" target="_blank" class="delete" data-id="<%=rows[i].id%>"><?php echo $this->translate('Delete');?></a></li>
+                </ul>
+            </td>
+            <td width="20%">
+                <%=rows[i].hidden%>
+            </td>
+        </tr>
+    <% } %>
+<% } %>
+</script>

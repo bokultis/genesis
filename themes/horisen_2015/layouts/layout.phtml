@@ -1,0 +1,210 @@
+<?php
+$buildNumber = '201410229';
+$this->doctype('HTML5');
+echo $this->doctype(); ?>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<?php echo $this->currLang; ?>">
+<head>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="/themes/horisen_2014/js/html5shiv.js"></script>
+    <![endif]--> 
+    <base href="<?php echo $this->serverUrl() . $this->fileWebRoot; ?>" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <?php
+        $favicon =  $this->themePath('images/favicon.ico');
+        $this   ->headLink(array('rel' => 'icon', 'href' => $favicon, 'type' => 'image/x-icon'),'PREPEND')
+                ->headLink(array('rel' => 'shortcut icon', 'href' => $favicon, 'type' => 'image/x-icon'),'PREPEND'); //fb ico
+        //fb sharer
+        echo $this->headMeta();
+        echo $this->headTitle();
+        
+
+        if(APPLICATION_ENV == 'development'){            
+            $this->headLink()->prependStylesheet($this->themePath('css/sticky-footer.css'));
+            $this->headLink()->prependStylesheet($this->themePath('css/search.css'));
+            $this->headLink()->prependStylesheet($this->themePath('css/internal-pages.css'));
+            $this->headLink()->prependStylesheet($this->themePath('css/style.css?v=2014-10-10'));
+            $this->headLink()->prependStylesheet($this->themePath('css/fonts.css'));
+            $this->headLink()->prependStylesheet($this->themePath('css/bootstrap-grid.css'));
+            $this->headLink()->prependStylesheet($this->themePath('css/bootstrap-form.css'));
+            $this->headLink()->prependStylesheet($this->themePath('css/bootstrap.min.css'));
+            $this->headLink()->prependStylesheet('/css/font-awesome.css');
+            $this->headLink()->prependStylesheet('/plugins/bxSlider/bx_styles/jquery.bxslider.css');
+            $this->headLink()->prependStylesheet('/plugins/fancybox/jquery.fancybox.css');
+        }else{
+            $this->headLink()->prependStylesheet($this->themePath('css/build.min.css?' . $buildNumber));
+        }
+        
+        $this->headStyle()->appendStyle(".gradient {filter: none;}", array('conditional' => 'gte IE 9'));
+        
+        echo $this->headLink();
+        echo $this->headStyle();      
+                
+        if(APPLICATION_ENV == 'development'){
+            $this->headScript()->appendFile('/modules/contact/js/jquery.ajaxSubmit.js');
+            $this->headScript()->prependFile($this->themePath('js/main.js?v=2014-10-10'));
+            $this->headScript()->prependFile('/plugins/collapsibleBox/jquery.collapsibleBox.js');
+            $this->headScript()->prependFile('/plugins/bxSlider/jquery.bxSlider.min.js');
+            $this->headScript()->prependFile('/plugins/picturefill/picturefill.js');
+            $this->headScript()->prependFile('/plugins/fancybox/jquery.fancybox.pack.js');
+            /*$this->headScript()->prependFile($this->themePath('js/bootstrap.min.js'));
+            $this->headScript()->prependFile($this->themePath('js/commonJs.js'));*/
+            $this->headScript()->prependFile('/js/jquery-1.11.1.min.js');
+            $this->headScript()->prependFile('/js/head.js');
+        }else{
+            $this->headScript()->prependFile($this->themePath('js/build.min.js?' . $buildNumber));
+        }
+        $this->headScript()->prependScript('document.createElement( "picture" );');
+                        
+        if(isset ($this->page) && null != $this->page->get_code() && '' != $this->page->get_code()){
+            $bodyClass = ' class="' . $this->page->get_code() . '"';
+        }
+        else{
+            $bodyClass = '';
+        }
+?>
+
+<!--
+hori/`                                                                                              
+horisenho:.                                                                                         
+`horisenhoris--.                                                                                    
+ /horisenhorisenho::`                                                                               
+ `horisenhorisenhorise+/                                                                            
+  .horisenhorisenhorisenhor+:                                                                       
+    -horisenhorisenhorisenhorise++-`                                                                 
+      :horisenhorisenhorisenhorisenho...                                                            
+        :/horisenhorisenhorisenhorisenhor+-`                                                        
+          ```::::horisenhorisenhorisenhorisenh/-                                                    
+                  ````----:horisenhorisenhorisenho:-                                               
+                               `....horisenhorisenhoris//.                                          
+           /horisenhori++++++++-``````````....+horisenhorise+.                                      
+            horisenhorisenhorisenhorisenhorisenhoris---+horise                                      
+             .horisenhorisenhorisenhorisenhorisenhorisenhorisen.                                    
+              .+horisenhorisenhorisenhorisenhorisenhorisenhoris+-.                                  
+                .:horisenhorisenhorisenhorisenhori::::/+::horisenh+`.       horis.                  
+                   .--horisenhorisenho------.```:::/horisenhorisenhoris-horisenhori+:`              
+                          -----`       ``.///horisenhorisenhori:+horisenhoris+horisenho/:``         
+                                ```/+++horisenhorisenhorisen-:+horisen:horisen/horisenhoris:``      
+                             .horisenhorisenhorisenhorisen:.+horisenho`horisenh.horisenhorise+      
+                             .horisenhorisenhorisenhor+:``+horisenhor- horisenh/`+horisenhoris      
+                               -/horisenhorisenhoris:` `+horisenhoris .horisenho/ -horisenhor-      
+                                   -:horisenhori/:   `/horisenhorise. horisenhori/ -horisenh.       
+                                                  ``/horisenhorisen/  horisenhori+  -horis-         
+                                                  horisenhorisenho+   horisenhori+    --            
+                                                  -horisenhorisen.    horisenhor/`                  
+                                                     ...........      horisen/.`                    
+                                                                      ```                                                                                                               
+                                   
+-->
+    
+</head>
+<body <?php echo $bodyClass;?>>
+    <header class="gradient">
+        <div class="container">
+            <a href="<?php echo $this->url(array('module' => 'cms', 'controller' => 'page', 'action' => 'index', 'page_id' => 59),'cms',true);?>" class="headerLogo"><img src="<?php echo $this->themePath('images/logo.png'); ?>" /></a>
+            <nav role="navigation">
+                <i class="fa fa-times main-menu-close"></i>
+                <?php echo $this->navigation()->menu()->setUseTranslator(false)->renderMenu($this->menuItems['main'],array('ulClass' => 'main-menu', 'indent' => 20, 'maxDepth' => 2)); ?>
+            </nav>
+            <div id="search">
+                <script>
+                (function() {
+                    var cx = '007269807150735512942:arprpuyektw';
+                    var gcse = document.createElement('script');
+                    gcse.type = 'text/javascript';
+                    gcse.async = true;
+                    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+                        '//www.google.com/cse/cse.js?cx=' + cx;
+                    var s = document.getElementsByTagName('script')[0];
+                    s.parentNode.insertBefore(gcse, s);
+                })();
+                </script>
+                <gcse:searchbox-only resultsUrl="<?php echo $this->serverUrl() . '/' . $this->currLang . '/search'; ?>" lr="lang_<?php echo $this->currLang; ?>" enableAutoComplete="true"></gcse:searchbox-only>
+            </div>
+<?php if(!isset($this->hideDisturber) || !$this->hideDisturber){ ?>             
+            <span id="feedbackToggle" class="fa fa-envelope"></span>
+<?php } ?>            
+            <span id="searchToggle" class="fa fa-search"></span>
+            <span id="menuToggle" class="menuToggle fa fa-bars"></span>
+<?php if(!isset($this->hideDisturber) || !$this->hideDisturber){ ?>            
+            <div id="feedback">
+                <div id="feedback_inner">
+                    <?php echo $this->partial('disturber/contact_generic.phtml');?>
+                </div>
+                <div class="feedbackToggle">
+                    <label for="nav-trigger"><?php echo $this->translate('CONTACT US');?><i class="fa fa-chevron-down feedback-lab-icon"></i></label> 
+                </div>
+                <div class="feedbackToggle white">
+                    <label for="nav-trigger"><?php echo $this->translate('HORISEN AG');?></label> 
+                </div>
+            </div>
+<?php } ?>                        
+        </div>
+    </header>
+    <?php echo $this->renderTeaser2('slider-main',$this->menuItemId); ?>
+    <main>
+        <div class="container">
+            <?php echo $this->layout()->content; ?>
+        </div>
+        <div class="menu-overlay"></div>
+        <div class="feedback-overlay"></div>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="socialIcons">
+                    <a href="https://www.facebook.com/horisen" target="_blank" title="Facebook" class="footerFb"></a>
+                    <a href="https://www.linkedin.com/company/2468133" target="_blank" title="LinkedIn" class="footerIn"></a>
+                    <a href="https://www.xing.com/companies/horisenag" target="_blank" title="Xing" class="footerUk"></a>
+                </div>
+            <ul class="langBarFooter">
+                <!--<li><span>Sprache</span></li>-->
+                <?php
+                if(isset ($this->availableLang) && is_array($this->availableLang) && count($this->availableLang)){
+                    foreach ($this->availableLang as $code => $value) {
+                        if(isset ($value['front_enabled']) && $value['front_enabled']){
+                            $langClass = $this->currLang == $code?"$code active":"$code";
+                            echo "<li><a href=\"" . $this->switchLang($code) . "\" class=\"$langClass\">" . $this->translate($value['name']) . "</a></li>";
+                        }
+                    }
+                } ?>
+            </ul>
+            <div class="footer-toggle"><i class="fa fa-chevron-up"></i></div>
+            <nav>
+                <?php echo $this->navigation()->menu()->setUseTranslator(false)->renderMenu($this->menuItems['footer'],array('ulClass' => 'footerMenu', 'indent' => 20, 'maxDepth' => 1)); ?>
+            </nav>
+            <div class="copyright">
+                <span>HORISEN AG</span><span>Hauptstasse 65</span><span>9400 Rorschach</span><span>Switzerland</span><a href="tel:+41 58 700 00 00">Tel +41 58 700 00 00</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="mailto:info@horisen.com" class="footerMail">info@horisen.com</a></span><br />
+            </div>
+            <div class="logoFooter">
+                <a href="http://www.horisen.com" target="_blank"><img src="<?php echo $this->themePath('images/logo-footer.png'); ?>"/></a>
+            </div>
+        </div>
+    </footer>
+
+    <?php
+    //Google Analytics
+    if(isset ($this->application)){
+        $gaSettings = $this->application->get_settings('ga');
+        //check ga settings
+        if(isset ($gaSettings) && isset ($gaSettings['tracking_id'])){
+?>
+<script type="text/javascript">
+//GA
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', '<?php echo $this->escape($gaSettings['tracking_id']);?>']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
+
+<?php
+        }
+    }
+    //print scripts
+    echo $this->headScript(); ?>
+</body>
+</html>

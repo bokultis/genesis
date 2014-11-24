@@ -1,0 +1,27 @@
+<?php
+if(isset($this->items) && count($this->items)){
+    $sliderSpeed = ($this->teaser->get_content('speed'))? $this->teaser->get_content('speed'): 5000;
+?>
+<ul class="bxslider" data-speed="<?php echo $sliderSpeed; ?>">
+<?php
+    $style = '';
+    /* @var $item Teaser_Model_Item */
+    foreach ($this->items as $item) {
+        $liId = ($item->get_content('css_id'))? ' id="' . $item->get_content('css_id') . '"' : '';
+        if(null != $item->get_content('css_text')){
+            $style .= "\n" . $item->get_content('css_text');
+        }
+?>
+            <li<?php echo $liId;?>>
+                <h1><?php echo $item->get_title(); ?></h1>
+                <?php echo $this->renderTeaserPicture($item, $this->box); ?>
+            </li>
+<?php
+    }
+    if($style != ''){
+        $this->headStyle()->appendStyle($style);
+    }    
+?>
+        </ul>
+<?php
+} ?>

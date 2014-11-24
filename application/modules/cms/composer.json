@@ -1,0 +1,14 @@
+{
+    "name": "horisen/cms-core-mod",
+    "description": "Horisen CMS core module",
+    "type": "horisen-cms_mod",
+    "require": {
+        "horisen/cms-core-lib": "*",
+        "horisen/cms-auth-mod": "*",
+        "horisen/cms-admin-mod": "*",
+        "horisen/cms-core-pub-mod": "*"
+    },
+    "extra": {
+        "installer-name": "cms"
+    }
+}

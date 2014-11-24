@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Contact</title>
+<style type="text/css">
+body, table, td{
+    font-family: Arial;
+}
+
+</style>
+</head>
+<body>
+<table>
+<?php
+    foreach ($this->data as $fieldId => $value) {
+        if(isset($this->fields[$fieldId]['skip_email']) && $this->fields[$fieldId]['skip_email']){
+            continue;
+        }        
+        if(!isset($this->fields[$fieldId]['name'])){
+            continue;
+        }
+        ?>
+        <tr>
+            <td style="font-size: 13px; font-weight: bold;">
+                <?php echo $this->translate($this->fields[$fieldId]['name']);?>
+            </td>
+            <td  style="font-size: 13px; font-weight: normal;">
+                <?php echo $this->escape($value); ?>
+            </td>
+        </tr>
+    <?php }
+?>
+<tr><td colspan="2"></td></tr>
+</table>
+<p style="font-size: 11px;">©<?php echo date("Y"); ?> HORISEN AG | Hauptstrasse 65 | 9400 Rorschach | <a href="http://www.horisen.com" target="_blank">www.horisen.com</a></p>
+</body>
+</html>

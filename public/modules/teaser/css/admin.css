@@ -1,0 +1,223 @@
+/* 
+Teaser module, custom admin styles
+*/
+h2{
+    font-size: 20px;
+    background-color: transparent;
+}
+h3{
+    font-size: 14px;
+}
+.hcms_content .language label{
+    margin-left: 10px;
+}
+.hcms_button {
+    margin-left: 15px;
+}
+.hcms_content_top .hcms_button a{
+    top: 6px;
+}
+#listContainer li.hide table {
+    display: none;
+}
+#listContainer li.show table {
+    display: inline-table;
+}
+.sliderTitle {
+    background-color: #dbe4f0;
+    padding: 3px 5px;
+}
+.sliderTitle h2, .sliderTitle h3 {
+    display: inline;
+}
+#listContainer{
+    margin-left: 0;
+}
+#listContainer>li {
+    list-style: none;
+    margin: 15px 0;
+}
+.sliderTitle > ul {
+    float: right;
+    margin-top: 4px;
+}
+.sliderTitle > img{
+    width: 15px;
+}
+#listContainer .show .sliderTitle > img{
+    -ms-transform: rotate(90deg); /* IE 9 */
+    -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+    transform: rotate(90deg);
+}
+.sliderTitle ul li a {
+    background-color: #707070;
+    color: #eee;
+    padding: 5px 5px 5px 30px;
+}
+.itemAdd{
+    background-image: url("/../modules/admin/images/icons/add_white.png");
+    background-position: 8px 5px;
+    background-repeat: no-repeat;
+    background-size: 16px auto;
+}
+.edit{
+    background-image: url("/../modules/admin/images/icons/edit_white.png");
+    background-position: 8px 5px;
+    background-repeat: no-repeat;
+    background-size: 16px auto;
+}
+.delete{
+    background-image: url("/../modules/admin/images/icons/delete_white.png");
+    background-position: 8px 5px;
+    background-repeat: no-repeat;
+    background-size: 16px auto;
+}
+.clone{
+    background-image: url("/../modules/admin/images/icons/clone_white.png");
+    background-position: 8px 5px;
+    background-repeat: no-repeat;
+    background-size: 16px auto;
+}
+.preview{
+    background-image: url("/../modules/admin/images/icons/preview_white.png");
+    background-position: 8px 5px;
+    background-repeat: no-repeat;
+    background-size: 16px auto;
+}
+.sliderTitle ul li {
+    display: inline;
+    margin: 0 0 0 15px;
+}
+td.status_active{
+    color: green;
+}
+td.status_pending{
+    color: khaki;
+}
+td.status_expired{
+    color: red;
+}
+#ajaxFormDialog{
+    max-height: 650px;
+    overflow: hidden;
+}
+#data .menu_items {
+    max-height: 565px;
+    overflow: auto;
+}
+#data h2 {
+    margin-bottom: 15px;
+    padding: 0;
+    top: 3px;
+}
+#data .leftSide .belongsTo input {
+    width: auto;
+}
+#data .leftSide ._input {
+    width: 210px;
+}
+#data .leftSide textarea{
+    width: 210px;
+}
+#data .error > li {
+    color: red;
+    list-style: none outside none;
+}
+#data .error {
+    margin-left: 0;
+    width: 215px;
+}
+table.hcms_table td{
+    width: 20%;
+}
+table.hcms_table{
+    border: none;
+}
+.ui-sortable > tr {
+    border-bottom: 1px solid #eee;
+}
+.ui-datepicker-trigger {
+    margin-left: 2px;
+    vertical-align: -2px;
+}
+.itemEdit {
+    background-image: url("/../modules/admin/images/icons/edit_black.png");
+    background-repeat: no-repeat;
+    background-size: 13px auto;
+    padding-left: 15px;
+    color: #7c7c7c;
+}
+.itemEdit:hover{
+    color: #7c7c7c;
+}
+.itemDelete {
+    background-image: url("/../modules/admin/images/icons/delete_black.png");
+    background-repeat: no-repeat;
+    background-size: 13px auto;
+    padding-left: 15px;
+    color: #7c7c7c;
+}
+.itemDelete:hover{
+    color: #7c7c7c;
+}
+.itemClone{
+    background-image: url("/../modules/admin/images/icons/clone_black.png");
+    background-repeat: no-repeat;
+    background-size: 13px auto;
+    padding-left: 15px;
+    color: #7c7c7c;
+}
+.itemClone:hover{
+    color: #7c7c7c;
+}
+._input.customTeaserImage {
+    margin-right: 15px;
+    width: 250px;
+}
+.belongsTo {
+    max-height: 135px;
+    overflow: auto;
+    width: 210px;
+}
+.belongsTo > label {
+    vertical-align: 4px;
+}
+div#box_code {
+    left: 10px;
+    display: inline-block;
+    top: 3px;
+}
+.dd-select {
+    padding: 3px;
+    width: 230px !important;
+    background: #fff !important;
+}
+.dd-selected-image {
+    max-width: 19px !important;
+    position: relative;
+    top: 0px;
+    left: 2px;
+}
+.dd-selected {
+    position: relative;
+    top: 0px;
+    padding: 0 !important;
+}
+.dd-selected-text {
+    position: relative;
+    font-size: 14px;
+    font-weight: normal;
+}
+ul.dd-options {
+    width: 230px !important;
+    padding: 0;
+}
+
+tr.sortable-placeholder{
+    height: 46px;
+    border: 2px solid beige;    
+}
+
+tr.ui-sortable-helper{
+    cursor: move;
+}

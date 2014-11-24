@@ -1,0 +1,48 @@
+<script type="text/javascript" src="/plugins/imagebrowser/jquery.imagebrowserdialog.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var opts = {};
+        $("#data").find(".userImage").each(function(){
+            var varId = $(this).data("var_id");                    
+            //assign options
+            var opts = {};
+            opts.fileWebRoot = fileWebRoot;
+            opts.activeModule = "bgchanger";
+            $(this).imagebrowserdialog(opts);
+        });
+        
+    });
+</script>
+
+<?php
+  $settings = Bgchanger_Model_MenuItemBackgroundMapper::getInstance()->getSettings();
+?>
+<script type="text/javascript">
+    var itemData = <?php echo json_encode($this->data);?>;
+</script>
+
+<form method="post" title="<?php if(isset($this->data['image_path']) && $this->data['image_path'] != '') {
+    echo $this->translate('Edit Background');
+}else {
+    echo $this->translate('Add new Background');
+      }?>" action="<?php echo $this->url(array('controller' => 'admin-menu', 'action' => 'menu-edit')) ?>" enctype="application/x-www-form-urlencoded">
+    <input type="hidden" id="data[cms_menu_item_id]" value="<?php echo $this->formInputValue($this->data,'cms_menu_item_id');?>" name="data[cms_menu_item_id]"/>
+    
+    <div id="data">
+       
+        <div class="rightSide" style="display: table-cell; width: 60%;">
+            <h3><?php echo $this->translate('Load Bacground images');?></h3>
+            <br />
+            <label><?php echo $this->translate('Upload ZIP package');?></label>
+            <div>
+                <input type="hidden" id="imagePackage" value="" />
+            </div>
+            <br />
+            <div id="images"></div>
+        </div>           
+    </div>
+    <div style="margin-top: 20px;">
+        <button type="submit" class="hcms_button submit" value="<?php echo $this->translate('Save');?>" name="submit[save]" ><?php echo $this->translate('Save');?></button>
+        <button type="submit" class="hcms_button submit" value="<?php echo $this->translate('Cancel');?>" name="submit[cancel]" ><?php echo $this->translate('Cancel');?></button>
+    </div>
+</form>

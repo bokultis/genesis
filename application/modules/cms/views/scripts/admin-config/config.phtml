@@ -1,0 +1,87 @@
+<?php
+    $this->headScript()->appendFile('/js/jquery.easytabs.js');
+?>
+<script type="text/javascript">
+    $(document).ready(function() {
+//        $("#tabs").tabs();
+       $('#tab-side-container').easytabs({
+            animate: false,
+            tabActiveClass: "selected-tab",
+            panelActiveClass: "displayed"
+        }); 
+        
+        $(".hcms_button").click(function(){
+            var data = $(".panel-container").find(".displayed").find("form").serialize();
+            var editUrl =  $(".panel-container").find(".displayed").find("form").attr('action') +"/tab/" + $(".panel-container").find(".displayed").attr('id');
+            saveConfig(editUrl, data);
+            return false;
+        });
+    });
+    
+    function saveConfig(editUrl, data){
+        $(".error").remove();
+        $.ajax({
+            url: editUrl,
+            type: "POST",
+            data: data, 
+            success: function(res){
+                if(res.success){
+                    $.flashMessenger(res.message,{clsName:"ok"});
+                }else{
+                    var errors = {};
+                    ajaxForm.parseErrors('data',null,res['message'],errors);
+                    for(var field in errors){
+                        var errorUl = '<ul class="error">';
+                        for(var i = 0; i < errors[field].length; i++){
+                            errorUl += '<li>' + errors[field][i] + '</li>';
+                        }
+                        errorUl += '</ul>';
+                        $(ajaxForm.jqId(field)).parent().append(errorUl);
+                    }
+                }
+            }
+        });
+    }
+</script>
+<style>
+#tab-side-container { background: #fff;  }
+#tab-side-container .tabs_list { height: 200px; list-style: none; margin: 0; padding: 0; background: #F7F7F7; float: left; border-right: solid 1px  #CCCCCC; }
+#tab-side-container .tabs_list li { width: 180px; margin: 0; padding: 0; text-align: center; }
+#tab-side-container .tabs_list li a { display: block; padding: 15px 0; outline: none;color: #878787; font-weight: bold;}
+#tab-side-container .tabs_list li a:hover { text-decoration: underline; }
+#tab-side-container .tabs_list li.selected-tab { background: #fff; position: relative; left: 1px; border-style: solid ; border-width: 1px 0 ;border-color:  #CCCCCC; }
+#tab-side-container .tabs_list li:first-child.selected-tab { border-top: none; }
+#tab-side-container .tabs_list li a.selected-tab { font-weight: bold; text-decoration: none; }
+#tab-side-container .panel-container { background: #fff; padding-top: 5px; padding-left: 250px; }
+.hcms_form label {clear: none}
+</style>
+<div class="hcms_content_top">
+    <h1><?php echo $this->translate('Configuration'); ?> </h1>
+</div>
+<div class="hcms_content" >
+        <div id="tab-side-container" class="clearfix">
+            <ul class="tabs_list">
+                <li ><a href="#Sitemap"><?php echo $this->translate('Site Map');?></a></li>
+            </ul>
+            <div class="panel-container">
+                <div id="Sitemap">
+                    <form method="post" class="hcms_form" title="<?php echo $this->translate('Edit Configuration');?>" action="<?php echo $this->url(array('controller' => 'admin-config', 'action' => 'config')) ?>" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" id="data[id]" value="<?php echo $this->escape($this->data['id']);?>" name="data[id]"/>
+                    <div>
+                        <label for="data[name]"><?php echo $this->translate('Choose the menu for sitemap');?>:</label>
+                          <select id="data[menu]" name="data[menu]">
+                              <option value=""><?php echo $this->translate('All menus');?></option>
+                            <?php foreach ($this->menus as $menu) {?>
+                            <option value="<?php echo $menu['code'];?>" <?php if(isset($this->data['settings']['sitemap']['menu']) &&  $menu['code'] == $this->data['settings']['sitemap']['menu']) {?>selected="selected" <?php } ?>><?php echo $this->escape($menu['name']);?></option>
+                            <?php }?>
+                        </select>
+                        <?php echo $this->errorMessages($this->errors['sitemap']);?>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix" style="margin-left: 300px;">
+            <button class="hcms_button submit" name="submit[save]" value="Save" type="button"><?php echo $this->translate('Save');?></button>
+        </div>
+</div>

@@ -1,0 +1,339 @@
+<?php
+    $this->headScript()->appendFile('/js/jquery.easytabs.js');
+    $this->headScript()->appendFile('/plugins/imagebrowser/jquery.imagebrowserdialog.js');
+    $this->headScript()->appendFile('/modules/admin/js/config.js');
+    $this->headLink()->appendStylesheet( '/modules/admin/css/config.css');
+?>
+<div class="hcms_content_top">
+    <h1><?php echo $this->translate('Configuration'); ?> </h1>
+</div>
+<div class="hcms_content" >
+        <div id="tab-side-container" class="clearfix">
+            <ul class="tabs_list">
+                <li ><a href="#General"><?php echo $this->translate('General information');?></a></li>
+          <!--      <li ><a href="#style_json"><?php echo $this->translate('Style information');?></a></li> -->
+                <li ><a href="#Email"><?php echo $this->translate('Email information');?></a></li>
+                <li ><a href="#Upload"><?php echo $this->translate('Upload information');?></a></li>
+                <li ><a href="#Ga"><?php echo $this->translate('Google Analytics');?></a></li>
+                <li ><a href="#Fb"><?php echo $this->translate('Fb Settings');?></a></li>
+                <li ><a href="#Twitter"><?php echo $this->translate('Twitter Settings');?></a></li>
+                <li ><a href="#Og"><?php echo $this->translate('Fb Open-Graph Settings');?></a></li>
+                <li ><a href="#Notes"><?php echo $this->translate('Notes');?></a></li>
+            </ul>
+            <div class="panel-container">
+                <div id="General">
+                    <form method="post" class="hcms_form" title="<?php echo $this->translate('Edit Configuration');?>" action="<?php echo $this->url(array('controller' => 'application', 'action' => 'edit')) ?>" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" id="data[id]" value="<?php echo $this->escape($this->data['id']);?>" name="data[id]"/>
+                    <div>
+                        <label for="data[name]"><?php echo $this->translate('Name');?>:</label>
+                        <input type="text" name="data[name]" id="data[name]" value="<?php echo (isset($this->data['name']))? $this->escape($this->data['name']):'';?>" maxlength="100" style="width:250px;" />
+                        <?php echo $this->errorMessages($this->errors['name']);?>
+                    </div>
+                    <div>
+                        <label for="data[status]"><?php echo $this->translate('Status');?>:</label>
+                         <select  id="data[status]" name="data[status]">
+                            <option <?php if (isset($this->data['status'] ) && $this->data['status'] != 'D') { ?>selected="selected" <?php } ?> value="A"><?php echo $this->translate('Active');?></option>
+                            <option <?php if (isset($this->data['status']) && $this->data['status'] == 'D') { ?>selected="selected"<?php } ?> value="D"><?php echo $this->translate('Inactive');?> </option>
+                        </select>
+                        <?php echo $this->errorMessages($this->errors['status']);?>
+                    </div>
+                    </form>
+                </div>
+                <!--
+                <div id="style_json">
+                    <form method="post" class="hcms_form" id="style_json" title="<?php echo $this->translate('Edit Configuration');?>" action="<?php echo $this->url(array('controller' => 'application', 'action' => 'edit')) ?>" enctype="application/x-www-form-urlencoded">
+                    <div>
+                        <label for="style_json"><?php echo $this->translate('Style JSON');?>:</label>
+                        <textarea id="data[style_json]" name="data[style_json]" cols="50" rows="6"><?php echo $this->escape(json_encode($this->data['style_json']));?></textarea>
+                        <?php echo $this->errorMessages($this->errors['style_json']);?>
+                    </div>
+                    </form>
+                </div>
+                -->
+                <div id="Email">
+                    <form method="post" class="hcms_form" title="<?php echo $this->translate('Edit Configuration');?>" action="<?php echo $this->url(array('controller' => 'application', 'action' => 'edit')) ?>" enctype="application/x-www-form-urlencoded">
+                    <div>
+                        <label for="data[from_email]"><?php echo $this->translate('From Email');?>:</label>
+                        <input type="text" size="30"  value="<?php echo (isset($this->data['email_settings']['from_email']))? $this->escape($this->data['email_settings']['from_email']) : "";?>" id="data[from_email]" name="data[from_email]" maxlength="60"/>
+                         <?php echo $this->errorMessages($this->errors['from_email']);?>
+                    </div>
+                    <div>
+                        <label for="data[from_name]"><?php echo $this->translate('From Name');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['email_settings']['from_name']))? $this->escape($this->data['email_settings']['from_name']):"";?>" id="data[from_name]" name="data[from_name]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['from_name']);?>
+                    </div>
+                    <div>
+                        <label for="data[to_emails]" ><?php echo $this->translate('To Emails');?>:</label>
+                        <table aligne="center" width="300" class="table_to_emails">
+                            <tr>
+                                <td><?php echo $this->translate('Name');?></td>
+                                <td><?php echo $this->translate('Email');?></td>
+                            </tr>
+                            <?php if(count($this->data['email_settings']['to_emails']) > 0 && isset($this->data['email_settings']['to_emails'])) { 
+                                foreach ($this->data['email_settings']['to_emails'] as $key => $toEmails) { ?>
+                            <tr>
+                                <td><input  style="width: 150px;" name="data[to_emails][<?php echo $key ;?>][name]" value="<?php echo $this->escape($toEmails['name']) ;?>" /></td>
+                                <td><input  style="width: 150px;" name="data[to_emails][<?php echo $key ;?>][email]" value="<?php echo $this->escape($toEmails['email']) ;?>" /></td>
+                            </tr>
+                            <?php }}else{ ?>
+                            <tr>
+                                <td><input  style="width: 150px;" name="data[to_emails][0][name]" value="" /></td>
+                                <td><input  style="width: 150px;" name="data[to_emails][0][email]" value="" /></td>
+                            </tr>
+                            <?php } ?>
+                        </table>
+                        <div style="clear:both;float:none;"> 
+                            <a href="#" id="addNewToEmail" style="float:left;"><?php echo $this->translate('Add New Email');?></a>
+                            <a href="#"  id="removeToEmail" style="margin-left:50px;" href="#"><?php echo $this->translate('Remove Last');?></a>
+                        </div>
+                        <?php echo $this->errorMessages($this->errors['to_emails']);?>
+                    </div>
+                    <div>
+                        <label class="required" for="data[port]"><?php echo $this->translate('Email Port');?>:</label>
+                        <input class="field_text" type="text" size="30" value="<?php echo (isset($this->data['email_settings']['parameters']['port']))?$this->escape($this->data['email_settings']['parameters']['port']):"";?>" id="data[port]" name="data[parameters][port]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['port']);?>
+                    </div>
+                    <div>
+                        <label for="data[auth]"><?php echo $this->translate('Email Auth');?>:</label>
+                        <input type="text" size="30" value="<?php echo $this->escape($this->data['email_settings']['parameters']['auth']);?>" id="data[auth]" name="data[parameters][auth]" maxlength="60"/>
+                         <?php echo $this->errorMessages($this->errors['auth']);?>
+                    </div>
+                    <div>
+                        <label for="data[username]"><?php echo $this->translate('Email Username');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['email_settings']['parameters']['username']))? $this->escape($this->data['email_settings']['parameters']['username']) :"";?>" id="data[username]" name="data[parameters][username]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['username']);?>
+                    </div>
+                    <div>
+                        <label for="data[password]"><?php echo $this->translate('Email Password');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['email_settings']['parameters']['password']))? $this->escape($this->data['email_settings']['parameters']['password']) :"";?>" id="data[password]" name="data[parameters][password]" maxlength="60"/>
+                         <?php echo $this->errorMessages($this->errors['password']);?>
+                    </div>
+                    <div>
+                        <label for="data[server]"><?php echo $this->translate('Email Server');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['email_settings']['parameters']['server']))?$this->escape($this->data['email_settings']['parameters']['server']):"";?>" id="data[server]" name="data[parameters][server]" maxlength="60"/>
+                         <?php echo $this->errorMessages($this->errors['server']);?>
+                    </div>
+                    <div>
+                        <label  for="data[transport]"><?php echo $this->translate('Email transport type');?>:</label>
+                         <select id="data[transport]" name="data[transport]">
+                            <option value="" selected="selected"><?php echo $this->translate('Select transport type');?></option>
+                            <?php foreach ($this->emailTransportTypeOptions as $type) { ?>
+                                <option value="<?php echo $type;?>" <?php if($this->data['email_settings']['transport'] == $type) { ?> selected="selected" <?php }?>><?php echo $type;?></option>
+                            <?php } ?>
+                         </select>
+                        <?php echo $this->errorMessages($this->errors['email_transport_type']);?>
+                    </div>
+                    </form>
+                </div>
+                <div id="Upload">
+                    <form method="post" class="hcms_form" title="<?php echo $this->translate('Edit Configuration');?>" action="<?php echo $this->url(array('controller' => 'application', 'action' => 'edit')) ?>" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" id="data[uploads]" value="" name="data[uploads]"/> 
+                    <input type="hidden" id="data[default_uploads]" value="" name="data[default_uploads]"/> 
+                    <fieldset class="Default">
+                        <legend><?php echo $this->translate('Default file extensions and mime types:'); ?></legend>
+                        <div style="float:left;padding-top: 1px;width: 220px;display: block;">
+                            <label for="data[default_extensions]" ><?php echo $this->translate('Extensions');?>:</label>
+                            <table aligne="center" width="300" class="default_table_extensions">
+                                <?php // print_r($this->data['settings']['default_upload']);
+                                if(isset($this->data['settings']['default_upload']) && isset($this->data['settings']['default_upload']['default_extensions']) && count($this->data['settings']['default_upload']['default_extensions']) > 0 ) { 
+                                    foreach ($this->data['settings']['default_upload']['default_extensions'] as $key => $defaultExtensions) { ?>
+                                <tr id="tr_<?php echo $key ;?>">
+                                    <td><input id="data[<?php echo $key ;?>][default_extensions]" style="width: 150px;" name="data[default_upload][<?php echo $key ;?>][default_extensions]" value="<?php echo $this->escape($defaultExtensions) ;?>" /> </td>
+                                </tr>
+                                <?php }}else{ ?>
+                                <tr id="tr_0">
+                                    <td><input id="data[0][default_extensions]" style="width: 150px;" name="data[default_upload][0][default_extensions]" value="" /> </td>
+                                </tr>
+                                <?php } ?>
+                                <input type="hidden" id="data[default_extensions]" />
+                            </table>
+                            <?php echo $this->errorMessages($this->errors['extensions']);?>
+                        </div>
+                        <div style="padding-top: 1px;padding-left: 40px;display: block;">
+                            <label for="data[default_mimetypes]" ><?php echo $this->translate('Mimetypes');?>:</label>
+                            <table aligne="center" width="300" class="default_table_mimetypes">
+                                <?php if(isset($this->data['settings']['default_upload'])  && isset($this->data['settings']['default_upload']['default_mimetypes']) && count($this->data['settings']['default_upload']['default_mimetypes']) > 0) { 
+                                    foreach ($this->data['settings']['default_upload']['default_mimetypes'] as $key => $defaultMimetypes) { ?>
+                                <tr id="tr_<?php echo $key ;?>">
+                                    <td><input id="data[<?php echo $key ;?>][default_mimetypes]" style="width: 150px;" name="data[default_upload][<?php echo $key ;?>][default_mimetypes]" value="<?php echo $this->escape($defaultMimetypes) ;?>" /> </td>
+                                </tr>
+                                <?php }}else{ ?>
+                                <tr id="tr_0">
+                                    <td><input id="data[0][default_mimetypes]" style="width: 150px;" name="data[default_upload][0][default_mimetypes]" value="" /> </td>
+                                </tr>
+                                <?php } ?>
+                                <input type="hidden" id="data[default_mimetypes]" />
+                            </table>
+                            <?php echo $this->errorMessages($this->errors['mimetypes']);?>
+                        </div>
+                    </fieldset>
+                    <fieldset style="margin-top: 10px;" class="Custom">
+                        <legend><?php echo $this->translate('Custom file extensions and mime types:'); ?></legend>
+                        <div style="float:left;padding-top: 1px;width: 220px;display: block;">
+                            <label for="data[extensions]" ><?php echo $this->translate('Extensions');?>:</label>
+                            <a href="#" id="addExtensions" style="float:left;"><?php echo $this->translate('Add Extensions');?></a><br/>
+                            <table aligne="center" width="220" class="table_extensions">
+                                <?php  //print_r($this->data['upload']);die;
+                                if(isset($this->data['settings']['upload']) && isset($this->data['settings']['upload']['extensions']) && count($this->data['settings']['upload']['extensions']) > 0 ) { 
+                                    foreach ($this->data['settings']['upload']['extensions'] as $key => $extensions) { ?>
+                                <tr id="tr_<?php echo $key ;?>">
+                                    <td><input id="data[<?php echo $key ;?>][extensions]" style="width: 150px;" name="data[upload][<?php echo $key ;?>][extensions]" value="<?php echo $this->escape($extensions) ;?>" /><a href="#"  class="removeExtensions"  data-tr_index="<?php echo $key;?>" href="#" style="display:none; padding-left: 5px"><img src="/images/delete.png"</a> </td>
+                                </tr>
+                                <?php }}else{ ?>
+                                <tr id="tr_0">
+                                    <td>
+                                        <input id="data[0][extensions]" style="width: 150px;" name="data[upload][0][extensions]" value="" /><a href="#"  class="removeExtensions"  data-tr_index="0" href="#" style="display:none; padding-left: 5px"><img src="/images/delete.png"</a> 
+                                    </td>
+                                </tr>
+                                <?php } ?>
+                                <input type="hidden" id="data[extensions]" />
+                            </table>
+                            <?php echo $this->errorMessages($this->errors['extensions']);?>
+                        </div>
+                        <div style="padding-top: 1px;padding-left: 40px;display: block;">
+                            <label for="data[mimetypes]" ><?php echo $this->translate('Mimetypes');?>:</label>
+                            <a href="#" id="addMimetypes" style="float:left;"><?php echo $this->translate('Add Mimetypes');?></a><br/>
+                            <table aligne="center" width="220" class="table_mimetypes">
+                                <?php if(isset($this->data['settings']['upload'])  && isset($this->data['settings']['upload']['mimetypes']) && count($this->data['settings']['upload']['mimetypes']) > 0) { 
+                                    foreach ($this->data['settings']['upload']['mimetypes'] as $key => $mimetypes) { ?> 
+                                <tr id="tr_<?php echo $key ;?>">
+                                    <td><input id="data[<?php echo $key ;?>][mimetypes]"  style="width: 150px;" name="data[upload][<?php echo $key ;?>][mimetypes]" value="<?php echo $this->escape($mimetypes) ;?>" /><a href="#"  class="removeMimetypes"  data-tr_index="<?php echo $key;?>" href="#" style="display:none; padding-left: 5px"><img src="/images/delete.png"</a></td>
+                                </tr>
+                                <?php }}else{ ?>
+                                <tr id="tr_0">
+                                    <td><input id="data[0][mimetypes]" style="width: 150px;" name="data[upload][0][mimetypes]" value="" /><a href="#"  class="removeMimetypes"  data-tr_index="0" href="#" style="display:none; padding-left: 5px"><img src="/images/delete.png"</a></td>
+                                </tr>
+                                <?php } ?>
+                                <input type="hidden" id="data[mimetypes]" />
+                            </table>
+                            <?php echo $this->errorMessages($this->errors['mimetypes']);?>
+                        </div>
+                        <?php if(!isset($this->data['settings']['upload'])) { ?>
+                        <span style="font-weight: bold"><?php echo $this->translate('NOTICE').': '.$this->notice; ?></span>                     
+                        <?php }?>
+                    </fieldset>
+                    </form>
+                </div>
+                <div id="Ga">
+                    <form method="post" class="hcms_form" title="<?php echo $this->translate('Edit Configuration');?>" action="<?php echo $this->url(array('controller' => 'application', 'action' => 'edit')) ?>" enctype="application/x-www-form-urlencoded">
+                    <div>
+                        <label for="data[email]"><?php echo $this->translate('Email');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['settings']['ga']['email']))?$this->escape($this->data['settings']['ga']['email']):"";?>" id="data[email]" name="data[email]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['email']);?>
+                    </div>
+                     <div>
+                        <label for="data[password]"><?php echo $this->translate('Password');?>:</label>
+                        <input type="text" size="30"  value="<?php echo (isset($this->data['settings']['ga']['password']))?$this->escape($this->data['settings']['ga']['password']):"";?>" id="data[password]" name="data[password]" maxlength="60"/>
+                         <?php echo $this->errorMessages($this->errors['password']);?>
+                    </div>
+                     <div>
+                        <label for="data[account_id]"><?php echo $this->translate('Account Id');?>:</label>
+                        <input type="text" size="30"  value="<?php echo (isset($this->data['settings']['ga']['account_id']))? $this->escape($this->data['settings']['ga']['account_id']):"";?>" id="data[account_id]" name="data[account_id]" maxlength="60"/>
+                         <?php echo $this->errorMessages($this->errors['account_id']);?>
+                    </div>
+                     <div>
+                        <label for="data[tracking_id]"><?php echo $this->translate('Tracking Id');?>:</label>
+                        <input type="text" size="30"  value="<?php echo (isset($this->data['settings']['ga']['tracking_id']))?$this->escape($this->data['settings']['ga']['tracking_id']):"";?>" id="data[tracking_id]" name="data[tracking_id]" maxlength="60"/>
+                         <?php echo $this->errorMessages($this->errors['tracking_id']);?>
+                    </div>
+                    </form>
+                </div>
+                <div id="Fb">
+                    <form method="post" class="hcms_form" title="<?php echo $this->translate('Edit Configuration');?>" action="<?php echo $this->url(array('controller' => 'application', 'action' => 'edit')) ?>" enctype="application/x-www-form-urlencoded">
+                    <div>
+                        <label for="data[api_id]"><?php echo $this->translate('Api Id');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['fb_settings']['api_id']))?$this->escape($this->data['fb_settings']['api_id']):"";?>" id="data[api_id]" name="data[api_id]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['api_id']);?>
+                    </div>
+                    <div>
+                        <label for="data[api_key]"><?php echo $this->translate('Api Key');?>:</label>
+                        <input type="text" size="30" value="<?php echo  (isset($this->data['fb_settings']['api_key']))? $this->escape($this->data['fb_settings']['api_key']):"";?>" id="data[api_key]" name="data[api_key]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['api_key']);?>
+                    </div>
+                    <div>
+                        <label for="data[api_secret]"><?php echo $this->translate('Api Secret');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['fb_settings']['api_secret']))?$this->escape($this->data['fb_settings']['api_secret']):"";?>" id="data[api_secret]" name="data[api_secret]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['api_secret']);?>
+                    </div>
+                    <div>
+                        <label for="data[canvas_page]"><?php echo $this->translate('Canvas Page');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['fb_settings']['canvas_page']))? $this->escape($this->data['fb_settings']['canvas_page']):"";?>" id="data[canvas_page]" name="data[canvas_page]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['canvas_page']);?>
+                    </div>
+                    <div>
+                        <label for="data[domain]"><?php echo $this->translate('Domain');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['fb_settings']['domain']))? $this->escape($this->data['fb_settings']['domain']):"";?>" id="data[domain]" name="data[domain]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['domain']);?>
+                    </div>
+                    <div>
+                        <label for="data[base_url]"><?php echo $this->translate('Base Url');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['fb_settings']['base_url'])) ? $this->escape($this->data['fb_settings']['base_url']):"";?>" id="data[base_url]" name="data[base_url]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['base_url']);?>
+                    </div>
+                    <div>
+                        <label for="data[scope]"><?php echo $this->translate('Scope');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['fb_settings']['login_params']['scope']))? $this->escape($this->data['fb_settings']['login_params']['scope']):'';?>" id="data[login_params][scope]" name="data[login_params][scope]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['scope']);?>
+                    </div>
+                    <div>
+                        <label for="data[redirect_uri]"><?php echo $this->translate('Redirect Uri');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['fb_settings']['login_params']['redirect_uri']))?$this->escape($this->data['fb_settings']['login_params']['redirect_uri']):"";?>" id="data[login_params][redirect_uri]" name="data[login_params][redirect_uri]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['redirect_uri']);?>
+                    </div>
+                    <div>
+                        <label for="data[page_url]"><?php echo $this->translate('Page Url');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['fb_settings']['page_url']))?$this->escape($this->data['fb_settings']['page_url']):"";?>" id="data[page_url]" name="data[page_url]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['page_url']);?>
+                    </div>
+                    </form>
+                </div>
+                <div id="Twitter">
+                    <form method="post" class="hcms_form" title="<?php echo $this->translate('Edit Configuration');?>" action="<?php echo $this->url(array('controller' => 'application', 'action' => 'edit')) ?>" enctype="application/x-www-form-urlencoded">
+                    <div>
+                        <label for="data[user_id]"><?php echo $this->translate('User Id');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['twitter_settings']['user_id']))?$this->escape($this->data['twitter_settings']['user_id']):"";?>" id="data[user_id]" name="data[user_id]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['user_id']);?>
+                    </div>
+                    <div>
+                        <label for="data[screen_name]"><?php echo $this->translate('User Screenname');?>:</label>
+                        <input type="text" size="30" value="<?php echo  (isset($this->data['twitter_settings']['screen_name']))? $this->escape($this->data['twitter_settings']['screen_name']):"";?>" id="data[screen_name]" name="data[screen_name]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['screen_name']);?>
+                    </div>
+
+                    <div>
+                        <label for="data[count]"><?php echo $this->translate('Count of tweets to retrieve');?>:</label>
+                        <input type="text" size="30" value="<?php echo (isset($this->data['twitter_settings']['count']))? $this->escape($this->data['twitter_settings']['count']):'';?>" id="data[count]" name="data[count]" maxlength="60"/>
+                        <?php echo $this->errorMessages($this->errors['count']);?>
+                    </div>
+                    </form>
+                </div>
+                <div id="Og">
+                    <form method="post" class="hcms_form" title="<?php echo $this->translate('Edit Configuration');?>" action="<?php echo $this->url(array('controller' => 'application', 'action' => 'edit')) ?>" enctype="application/x-www-form-urlencoded">
+                    <div>
+                        <label for="data[image]"><?php echo $this->translate('Logo Image');?>:</label>
+                        <input type="text" value="<?php echo (isset($this->data['og_settings']['image']))?$this->escape($this->data['og_settings']['image']):"";?>" id="data[image]" name="data[image]" style="width: 200px;"/>
+                        <?php echo $this->errorMessages($this->errors['image']);?>
+                        <a href="javascript:void(0);" id="imageClear"><?php echo $this->translate('Clear Image');?></a>
+                    </div>
+                    <div>
+                        <label for="data[description]"><?php echo $this->translate('Description');?>:</label>
+                        <textarea name="data[description]" id="data[description]" rows="10" cols="50"><?php echo (isset($this->data['og_settings']['description']))?$this->escape($this->data['og_settings']['description']):""; ?></textarea>
+                        <?php echo $this->errorMessages($this->errors['notes']);?>
+                    </div>
+                    </form>
+                </div>
+                <div id="Notes">
+                    <form method="post" class="hcms_form" title="<?php echo $this->translate('Edit Configuration');?>" action="<?php echo $this->url(array('controller' => 'application', 'action' => 'edit')) ?>" enctype="application/x-www-form-urlencoded">
+                    <div>
+                        <label for="data[notes]"><?php echo $this->translate('Notes');?>:</label>
+                        <textarea name="data[notes]" id="data[notes]" rows="10" cols="50"><?php echo (isset($this->data['settings']['notes']))?$this->escape($this->data['settings']['notes']):""; ?></textarea>
+                        <?php echo $this->errorMessages($this->errors['notes']);?>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix" style="margin-left: 300px;">
+            <button class="hcms_button submit" name="submit[save]" value="Save" type="button"><?php echo $this->translate('Save');?></button>
+        </div>
+</div>

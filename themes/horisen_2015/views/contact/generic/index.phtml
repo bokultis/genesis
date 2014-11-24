@@ -1,0 +1,74 @@
+<?php
+$this->hideDisturber = true;
+$this->headScript()->appendScript('
+$(document).ready(function(){    
+    //feedback form
+    $("#horisenContact").ajaxSubmit({
+        fieldSelector: \'[name="data\\[{field}\\]"]\',
+        onSubmit: function(data, errors){
+            if(data.success){
+                //reset form and close drawer
+                $("#horisenFeedback").get(0).reset();
+                //show message
+                var message = data["message"]? data["message"]: "Thank you";
+                //alert(message);
+                $("#formContainer").addClass("flipped");
+            }
+            else{
+                //alert(errors.join("\n"));
+            }
+        }
+    });
+});    
+');
+?>
+<div class="col-md-6">
+            <div id="formContainer" class="formContact">
+                <div class="formSide formFront">
+                    <form id="horisenContact" action="<?php echo $this->url(array('module'=>'contact','controller'=>'generic','action'=>'index','form_id' => $this->formId),'cms',true);?>" method="POST" role="form">
+<?php
+    //Zend_Debug::dump($this->errors);
+    echo $this->formFields($this->fields);
+?>
+                        <button type="submit" name="submit[save]" class="btn btn-default feedbackBtn"><?php echo $this->translate('Send feedback'); ?></button>
+                        <p><?php echo $this->translate('We will advise you personally and without obligation'); ?></p>
+                    </form>
+                </div>
+                <div class="formSide formBack">
+                    <?php echo $this->translate("Thank you! <br>We'll get in touch with you as soon as possible.");?>
+                </div>                
+            </div>
+</div>
+<div class="col-md-6 addressInfo">
+    <h1>Address</h1>
+    <ul>
+        <li>HORISEN AG</li>
+        <li>Hauptstrasse 65</li>
+        <li>CH-9400 Rorschach</li>
+        <li>Schweiz</li>
+    </ul>
+    <div class="col-md-5">
+        <p>Phone <a href="tel:+41 58 700 00 00">+41 58 700 00 00</a></p>
+    </div>
+    <div class="col-md-7">
+        <p>Email <a href="mailto:info@horisen.com">info@horisen.com</a></p>
+        <p>Web <a href="http://www.horisen.com" target="_blank">www.horisen.com</a></p>
+    </div>
+    <div class="col-md-12 map">
+        <a class="group" rel="group1" href="#mapBox">Google Maps</a>
+        <img src="<?php echo $this->themePath('images/contact_map_en.png'); ?>" />
+    </div>
+    <div class="col-md-12 route routeCar">
+        <h3><?php echo $this->translate("Traveling by car");?></h3>
+        <a target="_blank" href="http://map.local.ch/de/?to=Hauptstrasse-65-9400-Rorschach">&#187; <?php echo $this->translate("Route planner");?></a>
+        <a target="_blank" href="">&#187; <?php echo $this->translate("Directions");?></a>
+    </div>
+    <div class="col-md-12 route routeTrain">
+        <h3><?php echo $this->translate("Travelling by public transport");?></h3>
+        <a target="_blank" href="http://fahrplan.sbb.ch/bin/query.exe/dn?z=9400%20Rorschach%2C%20Hauptstrasse%2065&zadr=1">&#187; <?php echo $this->translate("Schedule");?></a>
+    </div> 
+    <div id="mapBox">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2696.5962504029876!2d9.4924424!3d47.478296799999995!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479b1bbb5963f3d1%3A0x763c1a978dfd97b2!2sHauptstrasse+65%2C+9400+Rorschach%2C+Switzerland!5e0!3m2!1sen!2srs!4v1416228106113" width="100%" height="100%" frameborder="0" style="border:0"></iframe>
+    </div>
+</div>
+        

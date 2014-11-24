@@ -1,0 +1,40 @@
+{
+    "name": "horisen/cms",
+    "description": "Horisen Genesis CMS",
+    "type": "library",
+    "keywords": [
+        "cms",
+        "zf1"
+    ],
+    "homepage": "http://www.horisen.com/",
+    "license": "HORISEN",
+    "require": {
+        "php": ">=5.2.11",
+        "zendframework/zendframework1": ">=1.12"
+    },
+    "autoload": {
+        "psr-0": {
+            "Zend_": "library/",
+            "HCMS_": "library/",
+            "HCLI_": "library/"
+        }
+    },
+    "include-path": [
+        "library/"
+    ],
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.12.x-dev"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*",
+        "phpunit/dbunit": "1.3.*"
+    },
+    "archive": {
+        "exclude": ["/demos", "/documentation", "/tests", "/docs"]
+    }
+}

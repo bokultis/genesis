@@ -1,7 +1,1 @@
 /application/configs/application.ini
-
-#cache folders
-
-/cache/class/*
-/cache/core/*
-/cache/file/*

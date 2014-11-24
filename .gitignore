@@ -1,2 +1,4 @@
 /application/configs/application.ini
 /genesis/library/Zend/*
+
+/public/.htaccess

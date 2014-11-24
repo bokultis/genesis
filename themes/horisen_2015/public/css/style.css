@@ -1,3 +1,8 @@
+body {
+    margin: 0;/*new by kuzeljko git*/
+    
+}
+
 /* general */
     html {font-size:1rem;}
     body {color:#090a3e; font-family:'Roboto'; height:100%; line-height:1.4;}

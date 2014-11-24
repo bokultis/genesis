@@ -1,1 +1,4 @@
 /application/configs/application.ini
+/library/Zend
+
+/public/.htaccess

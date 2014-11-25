@@ -10,7 +10,13 @@ $this->headScript()->appendFile('/plugins/tinymce/jquery.tinymce.js');
 $this->headScript()->appendFile('/js/tinyCommon.js');
 $this->headScript()->appendFile('/plugins/coolfieldset/js/jquery.coolfieldset.js');
 $this->headScript()->appendFile('/plugins/jquery-ui-timepicker-addon/jquery-ui-timepicker-addon.js'); 
+
+$this->headScript()->appendFile('/modules/admin/js/horisen-ui-2.2.0.js');
+//$this->headScript()->appendFile('/modules/admin/js/responsive-tabs.js');
+
 $this->headLink()->appendStylesheet('/plugins/coolfieldset/css/style.css');
+$this->headLink()->appendStylesheet('/modules/admin/css/horisen-ui-2.2.0.css');
+$this->headLink()->appendStylesheet('/modules/admin/css/horisen-ui-icons.css');
 $this->headLink()->appendStylesheet('/plugins/hfb/css/style.css');
 
 $typeEditData = array();
@@ -303,7 +309,15 @@ $singleType = isset ($pageType);
                 include(typeObject.file);
             }
         }
+        
+        
+        
+        
+        
+        
+        
     });
+    
 </script>
 <div class="hcms_content_top">
     <h1><?php echo $this->translate($singleType?$pageType->get_name():'Content'); ?> <span class="hcms_button"><a href="#" style="margin:6px 0 0 0;" class="add button"><?php echo $this->translate('Add new'); ?></a></span></h1>
@@ -348,23 +362,35 @@ $singleType = isset ($pageType);
         ));?>         
         <!--<span class="hcms_button"><a href="#">Filter</a></span>-->
     </div>
-    <table class="hcms_table adminList" width="100%">
-        <thead>
-            <tr>
-                <th><a href="#" class="sort" data-column="id"><?php echo $this->translate('ID');?><b></b></a></th>
-                <th><a href="#" class="sort" data-column="title"><?php echo $this->translate('Title');?><b></b></a></th>
-                <th><a href="#" class="sort" data-column="code"><?php echo $this->translate('Code');?><b></b></a></th>
-                <th><a href="#" class="sort" data-column="url_id"><?php echo $this->translate('URL ID');?><b></b></a></th>
-                <th><a href="#" class="sort" data-column="type_name"><?php echo $this->translate('Type');?><b></b></a></th>
-                <th><a href="#" class="sort" data-column="user_name"><?php echo $this->translate('User');?><b></b></a></th>
-                <th><a href="#" class="sort" data-column="status"><?php echo $this->translate('Status');?><b></b></a></th>
-                <th><a href="#" class="sort" data-column="posted"><?php echo $this->translate('Posted');?><b></b></a></th>
-            </tr>
-        </thead>
-        <tbody id="listContainer">
-        </tbody>
-    </table>
-    <div id="pager"></div>
+    
+    
+    <div class="res-tabs">
+        <ul class="tab-list">
+            <li>Normal Tab</li>
+        </ul>
+        <div class="articles">
+            <div>
+                <input type="button" id="add2End" value="Add End Tab" />
+                <table class="hcms_table adminList" width="100%">
+                    <thead>
+                        <tr>
+                            <th><a href="#" class="sort" data-column="id"><?php echo $this->translate('ID');?><b></b></a></th>
+                            <th><a href="#" class="sort" data-column="title"><?php echo $this->translate('Title');?><b></b></a></th>
+                            <th><a href="#" class="sort" data-column="code"><?php echo $this->translate('Code');?><b></b></a></th>
+                            <th><a href="#" class="sort" data-column="url_id"><?php echo $this->translate('URL ID');?><b></b></a></th>
+                            <th><a href="#" class="sort" data-column="type_name"><?php echo $this->translate('Type');?><b></b></a></th>
+                            <th><a href="#" class="sort" data-column="user_name"><?php echo $this->translate('User');?><b></b></a></th>
+                            <th><a href="#" class="sort" data-column="status"><?php echo $this->translate('Status');?><b></b></a></th>
+                            <th><a href="#" class="sort" data-column="posted"><?php echo $this->translate('Posted');?><b></b></a></th>
+                        </tr>
+                    </thead>
+                    <tbody id="listContainer">
+                    </tbody>
+                </table>
+                <div id="pager"></div>
+            </div>
+        </div>
+    </div>
 </div>
 <script type="text/html" id="records_tpl">
 <% if (rows.length > 0){
@@ -416,3 +442,175 @@ $singleType = isset ($pageType);
             <?php }?>
     </select>
 </div>
+<script type="text/javascript">
+/*res-tables*/
+    $(function() {
+                var rt = ".res-tabs";
+                
+                // initialize NaviBar (test version)
+                $(rt).restabs({
+                    load: function(e, ui) {
+//                        alert('On Load: ' + ui.id);
+                    },
+                    open: function(e, ui) {
+//                        alert('On Tab Open: ' + ui.id);
+                    },
+                    close: function(e, ui) {
+//                        alert('On Tab Close: ' + ui.id);
+                    },
+                    remove: function(e, ui) {
+//                        alert('On Tab Remove: ' + ui.id);
+                    },
+                    context_obj: this,
+                    responsiveMode: true,
+                    tabPlus: true,
+                    resizeTimeOut: 600,
+                    showRemove: true
+                });
+                
+                // set events
+                $(rt).bind("load", function(e){
+                    var id = e.target.id;
+                    $("#idLoad").val(id);
+                });
+                $(rt).bind("addNew", function(e){
+                    var id = e.target.id;
+                    $("#idAddNew").val(id);
+                    
+                    var ids = $(rt).restabs("addEndTab");
+                    
+                    dummySetTab(ids);
+                    
+                    $(rt).restabs("activateTab", {tabId: ids.tabId});
+                    
+                });
+                $(rt).bind("open", function(e){
+                    var id = e.target.id;
+                    $("#idOpen").val(id);
+                });
+                $(rt).bind("close", function(e){
+                    var id = e.target.id;
+                    $("#idClose").val(id);
+                });
+                
+                // actions of RespTabs...
+                // get active index
+                $("#getAIdx").click( function() {
+                    var idx = $(rt).restabs("getActiveIndex");
+                    $("#actIdx").val(idx);
+                });
+                // get active id
+                $("#getTId").click( function() {
+                    var id = $(rt).restabs("getActiveId");
+                    $("#tabId").val(id);
+                });
+                // get tab-plus id
+                $("#getTPId").click( function() {
+                    var id = $(rt).restabs("getTabPlusId");
+                    $("#tabId").val(id);
+                });
+                // get article id
+                $("#getAId").click( function() {
+                    var id = $(rt).restabs("getArticleId", $(rt).restabs("getActiveId"));
+                    $("#articleId").val(id);
+                });
+                
+                // add top tab
+                $("#add2Top").click( function() {
+                    var ids = $(rt).restabs("addTopTab");
+                    
+                    dummySetTab(ids);
+                    $(rt).restabs("activateTab", {tabId: ids.tabId});
+                });
+                // add end tab
+                $("#add2End").click( function() {
+                    var ids = $(rt).restabs("addEndTab");
+                    
+                    dummySetTab(ids);
+                    $(rt).restabs("activateTab", {tabId: "Edit: "});
+                });
+                // add before tab
+                $("#addBefore").click( function() {
+                    var id = $("#tabId").val();
+                    var ids = $(rt).restabs("addTab", {before: id});
+                    
+                    dummySetTab(ids);
+                    $(rt).restabs("activateTab", {tabId: ids.tabId});
+                });
+                // add after tab
+                $("#addAfter").click( function() {
+                    var id = $("#tabId").val();
+                    var ids = $(rt).restabs("addTab", {after: id});
+                    
+                    dummySetTab(ids);
+                    $(rt).restabs("activateTab", {tabId: ids.tabId});
+                });
+                
+                // activate tab
+                $("#actTab").click( function() {
+                    var tid = $("#tabId").val();
+                    
+                    $(rt).restabs("activateTab", {tabId: tid});
+                });
+                // set tab
+                $("#setTab").click( function() {
+                    var tid = $("#tabId").val();
+                    var aid = $("#articleId").val();
+                    var title = $("#tabHtml").val();
+                    var content = $("#articleHtml").val();
+                    
+                    $(rt).restabs("setTab", {tabId: tid, articleId:aid}, {
+                        title: title,
+                        content: content
+                    });
+                });
+                
+                // set styled taba
+                $("#sNew").click( function() {
+                    var tid = $("#tabId").val();
+                    $(rt).restabs("setTabStyle", tid, "new");
+                });
+                $("#sAction").click( function() {
+                    var tid = $("#tabId").val();
+                    $(rt).restabs("setTabStyle", tid, "action");
+                });
+                $("#sCompleted").click( function() {
+                    var tid = $("#tabId").val();
+                    $(rt).restabs("setTabStyle", tid, "completed");
+                });
+                $("#sApps").click( function() {
+                    var tid = $("#tabId").val();
+                    $(rt).restabs("setTabStyle", tid, "apps");
+                });
+                
+                // remove tab
+                $("#rmvTab").click( function() {
+                    var id = $("#tabId").val();
+                    $(rt).restabs("removeTab", id);
+                });
+                // remove closed tab
+                $("#rmvCTabs").click( function() {
+                    $(rt).restabs("removeClosedTabs");
+                });
+                
+                
+                var dummySetTab = function(ids){
+                    $(rt).restabs("setTab", ids, {
+                        title: ids.tabId,
+                        content: "Content of Tab " + ids.tabId,
+                        dropdown: {
+                            target: "tabMenu"
+                        },
+                        removable: true,
+                        icon: "admin"
+                    });
+
+                    $("#tabId").val(ids.tabId);
+                    $("#articleId").val(ids.articleId);
+                    $("#tabHtml").val(ids.tabId);
+                    $("#articleHtml").val("Content of Tab " + ids.tabId);
+                };
+                
+            });
+
+</script>
